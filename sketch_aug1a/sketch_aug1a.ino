@@ -1,28 +1,7 @@
-#include <ArduinoWiFiServer.h>
-#include <BearSSLHelpers.h>
-#include <CertStoreBearSSL.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WiFiAP.h>
-#include <ESP8266WiFiGeneric.h>
-#include <ESP8266WiFiGratuitous.h>
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266WiFiSTA.h>
-#include <ESP8266WiFiScan.h>
-#include <ESP8266WiFiType.h>
-#include <WiFiClient.h>
-#include <WiFiClientSecure.h>
-#include <WiFiClientSecureBearSSL.h>
-#include <WiFiServer.h>
-#include <WiFiServerSecure.h>
-#include <WiFiServerSecureBearSSL.h>
-#include <WiFiUdp.h>
-
-#include <dummy.h>
-
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-#define SERVER_URL "http://192.168.1.15:5000/temp"
+#define SERVER_URL "http://191.96.36.114:24640"
 
 
 void setup(){
@@ -47,6 +26,14 @@ void setupHttpClient()
   Serial.println(WiFi.localIP());
 }
  
+void UploadData(){
+  if((WiFi.status()) == WL_CONNECTED)
+}
+
+
+
+
+
 void postJsonData(char *data)
 {
   if ((WiFi.status() == WL_CONNECTED)) {
