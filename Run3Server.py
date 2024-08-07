@@ -9,7 +9,7 @@ def SaveInfo(info):
         
 
 # Define the route to handle POST requests at the root URL
-@app.post("/")
+@app.route('/')
 def root():
 
     Incriment = 0

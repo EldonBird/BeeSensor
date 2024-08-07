@@ -1,70 +1,69 @@
+#include <DHT.h>
+#include <DHT_U.h>
+
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <WiFiClient.h>
 
-#define SERVER_URL "http://191.96.36.114:24640"
+#define DHTTYPE DHT11
+
+WiFiClient wifiClient;
 
 
-void setup(){
 
-}
+DHT dht(D4, DHTTYPE);
 
-void loop(){
-
-}
-
-//Assumes Serial has been set up
-void setupHttpClient()
-{
-  WiFi.beginSmartConfig();
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected! IP address: ");
-  Serial.println(WiFi.localIP());
-}
+void setup () {
+  Serial.begin(115200);
+  WiFi.begin("TMOBILE-wifi", "finishing.linguini.quote.chaplain");
  
-void UploadData(){
-  if((WiFi.status()) == WL_CONNECTED)
-}
-
-
-
-
-
-void postJsonData(char *data)
-{
-  if ((WiFi.status() == WL_CONNECTED)) {
-
-    WiFiClient client;
-    HTTPClient http;
-
-    Serial.print("[HTTP] begin...\n");
-    http.begin(client, SERVER_URL); //HTTP
-    http.addHeader("Content-Type", "application/json");
-
-    Serial.print("[HTTP] POST...\n");
-
-    int httpCode = http.POST(data);
-
-    if (httpCode > 0) {
-      
-      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
-
-      if (httpCode == HTTP_CODE_OK) {
-        const String& payload = http.getString();
-        Serial.println("received payload:\n<<");
-        Serial.println(payload);
-        Serial.println(">>");
-      }
-
-    } else {
-      Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
-    }
-
-    http.end();
+  while (WiFi.status() != WL_CONNECTED) {
+ 
+    delay(1000);
+    Serial.println("Connecting..");
+ 
   }
+  Serial.println("Connected to WiFi Network");
+
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(D4, INPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+ 
 }
 
+ 
+void loop() {
+
+  digitalWrite(LED_BUILTIN, LOW);
+
+  dht.begin();
+
+  float hum = dht.readHumidity();
+  float temp = dht.readTemperature(false);
+  
+
+  
+ 
+  if (WiFi.status() == WL_CONNECTED) { 
+ 
+    HTTPClient http;
+ 
+    http.begin(wifiClient, "http://192.168.12.88:24640/Submit");
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+ 
+    String requestData = ("temp=" + String(temp) + "&hum" + String(hum));
+    int httpCode = http.POST(requestData);
+
+    String payload = http.getString();
+    Serial.println("Transmitting");
+ 
+    http.end();  
+ 
+  }
+
+
+  delay(1000);                      // Wait for a second
+  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  delay(2000);                      // Wait for two seconds (to demonstrate the active low LED)
+
+}
