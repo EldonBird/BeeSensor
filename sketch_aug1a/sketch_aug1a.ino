@@ -5,6 +5,7 @@
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
 
+
 #define DHTTYPE DHT11
 
 WiFiClient wifiClient;
