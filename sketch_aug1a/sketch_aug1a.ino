@@ -14,6 +14,8 @@ WiFiClient wifiClient;
 
 DHT dht(D4, DHTTYPE);
 
+byte mac[6];
+
 void setup () {
   Serial.begin(115200);
   WiFi.begin("TMOBILE-wifi", "finishing.linguini.quote.chaplain");
@@ -29,6 +31,8 @@ void setup () {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(D4, INPUT);
   digitalWrite(LED_BUILTIN, LOW);
+
+  WiFi.macAddress(mac);
  
 }
 
@@ -49,10 +53,10 @@ void loop() {
  
     HTTPClient http;
  
-    http.begin(wifiClient, "http://192.168.12.88:24640/Submit");
+    http.begin(wifiClient, "http://127.0.0.1:24640/Submit");
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
  
-    String requestData = ("temp=" + String(temp) + "&hum" + String(hum));
+    String requestData = ("temp=" + String(temp) + "&hum" + String(hum) + "&mac" + mac.c_str());
     int httpCode = http.POST(requestData);
 
     String payload = http.getString();
