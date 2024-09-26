@@ -1,0 +1,3 @@
+My father had an idea that he had learned from a friend/coworker about assembling a device that would track his bee hives. He had origionally went to the internet where this solution was found, and used the curcuit. Sadly I have no information on where he found it, but when it was handed to me I had to figure out the software for everything as the origional had failed to work for him.
+
+In simple terms, this is a flask server that receives information over the internet from the ocnenected devices. They work both on a local netwrok and over the actual internet so that they could be configured to work from his remote property.
